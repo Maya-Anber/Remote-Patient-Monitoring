@@ -13,13 +13,15 @@ class SendServoScreen extends StatefulWidget {
 }
 
 class _SendServoScreenState extends State<SendServoScreen> {
-  final _topicController = TextEditingController(); // Controller for the topic input
   final MQTTService mqttService = MQTTService(); // Instance of the MQTTService
+  final String topic =
+      'servo/control'; // Predefined topic for the servo control
 
   @override
   void initState() {
     super.initState();
-    mqttService.connect(context); // Connect to the MQTT broker when the screen initializes
+    mqttService.connect(
+        context); // Connect to the MQTT broker when the screen initializes
   }
 
   // Function to publish a message to the MQTT topic
@@ -28,7 +30,7 @@ class _SendServoScreenState extends State<SendServoScreen> {
     builder.addString(message); // Add message to the payload
 
     mqttService.client.publishMessage(
-      _topicController.text, // Topic from the text controller
+      topic, // Use the predefined topic
       MqttQos.atMostOnce, // Quality of service level for the message
       builder.payload!, // Payload for the message
     );
@@ -49,7 +51,8 @@ class _SendServoScreenState extends State<SendServoScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.popAndPushNamed(context, '/home'); // Navigate to home screen
+              Navigator.popAndPushNamed(
+                  context, '/home'); // Navigate to home screen
             },
             icon: Icon(Icons.home, color: Colors.white), // Home icon color
           ),
@@ -58,34 +61,20 @@ class _SendServoScreenState extends State<SendServoScreen> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/f09756aac5ddaee1a7f86c8b70d7a247.jpg'), // Background image
+            image: AssetImage(
+                'assets/images/f09756aac5ddaee1a7f86c8b70d7a247.jpg'), // Background image
             fit: BoxFit.cover, // Fit the image to cover the entire container
           ),
         ),
         child: Padding(
           padding: EdgeInsets.all(16.0), // Padding around the content
           child: Column(
+            mainAxisAlignment:
+                MainAxisAlignment.center, // Center content vertically
             children: [
-              TextField(
-                controller: _topicController, // Text field for the topic input
-                decoration: InputDecoration(
-                  labelText: 'Topic',
-                  labelStyle: TextStyle(color: secondaryPink),
-                  filled: true, // Fill background of text field
-                  fillColor: Colors.white, // Background color of text field
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: primaryPink),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: secondaryPink),
-                  ),
-                ),
-              ),
-              SizedBox(height: 20), // Space between elements
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Distribute buttons evenly
+                mainAxisAlignment:
+                    MainAxisAlignment.spaceEvenly, // Distribute buttons evenly
                 children: [
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -93,12 +82,14 @@ class _SendServoScreenState extends State<SendServoScreen> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10), // Button shape
                       ),
-                      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30), // Button padding
+                      padding: EdgeInsets.symmetric(
+                          vertical: 15, horizontal: 30), // Button padding
                     ),
                     onPressed: () {
                       _publishMessage('OPEN'); // Publish 'OPEN' message
                     },
-                    child: Text('OPEN', style: TextStyle(color: Colors.white)), // Button text
+                    child: Text('OPEN',
+                        style: TextStyle(color: Colors.white)), // Button text
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -106,12 +97,14 @@ class _SendServoScreenState extends State<SendServoScreen> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10), // Button shape
                       ),
-                      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30), // Button padding
+                      padding: EdgeInsets.symmetric(
+                          vertical: 15, horizontal: 30), // Button padding
                     ),
                     onPressed: () {
                       _publishMessage('CLOSE'); // Publish 'CLOSE' message
                     },
-                    child: Text('CLOSE', style: TextStyle(color: Colors.white)), // Button text
+                    child: Text('CLOSE',
+                        style: TextStyle(color: Colors.white)), // Button text
                   ),
                 ],
               ),
